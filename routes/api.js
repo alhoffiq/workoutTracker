@@ -11,7 +11,7 @@ router.get("/exercise", ({ body }, res) => {
 })
 
 router.get("/stats", (req, res) => {
-  res.sendFile(path.join(__dirname, "./public/stats.html"));
+  res.sendFile(path.join(__dirname, "../public/stats.html"));
 });
 
 router.post("/api/workouts", ({ body }, res) => {
@@ -25,7 +25,7 @@ router.post("/api/workouts", ({ body }, res) => {
 });
 
 router.put("/api/workouts/:id", (req, res) => {
-  db.Workout.findOneAndUpdate(req.params.id, { $push: { exercises: req.body } })
+  db.Workout.findByIdAndUpdate(req.params.id, { $push: { exercises: req.body } })
     .then(dbWorkout => {
       res.json(dbWorkout);
     })
@@ -35,6 +35,16 @@ router.put("/api/workouts/:id", (req, res) => {
 });
 
 router.get("/api/workouts", (req, res) => {
+  db.Workout.find({})
+    .then(dbWorkout => {
+      res.json(dbWorkout);
+    })
+    .catch(err => {
+      res.status(400).json(err);
+    });
+});
+
+router.get("/api/workouts/range", (req, res) => {
   db.Workout.find({})
     .then(dbWorkout => {
       res.json(dbWorkout);
